@@ -1,0 +1,40 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block hero %}
+<section class="hero hero-large" id="food-detail-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Dish details</span>
+        <h1>{{ food.name }}</h1>
+        <p>See what makes this meal special, then add it to your cart for quick checkout.</p>
+        <div class="hero-actions">
+            <a href="{% url 'cart' %}" class="btn btn-secondary">View cart</a>
+            <a href="#details" class="btn btn-primary">Order now</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="food-detail-section" id="details">
+    <div class="food-detail-grid">
+        <div class="detail-image">
+            <img src="{{ food.image.url }}" alt="{{ food.name }}">
+        </div>
+        <article class="detail-card">
+            <h1>{{ food.name }}</h1>
+            <p class="detail-price">${{ food.price }}</p>
+            <p>{{ food.description }}</p>
+            <form action="{% url 'add_to_cart' food.pk %}" method="post" class="detail-form ajax-add-to-cart">
+                {% csrf_token %}
+                <input type="hidden" name="next" value="{% url 'food_detail' food.pk %}">
+                <button type="submit" class="btn btn-primary">Add to cart</button>
+            </form>
+            <div class="detail-meta">
+                <span>Delivery time: 25-35 min</span>
+                <span>Serves: 1 person</span>
+            </div>
+        </article>
+    </div>
+</section>
+{% endblock %}

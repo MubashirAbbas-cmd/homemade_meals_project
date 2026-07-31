@@ -1,0 +1,298 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block hero %}
+<section class="hero hero-large" id="home" style="background-image: linear-gradient(180deg, rgba(18, 12, 5, 0.55), rgba(232, 105, 40, 0.25)), url('{% static 'home/images/hero-bg.jpg' %}');">
+    <div class="hero-grid">
+        <div class="hero-copy">
+            <span class="eyebrow">Fresh food, fast delivery</span>
+            <h1>Delicious homemade meals delivered to your door.</h1>
+            <p>Choose from chef-crafted favorites, order in seconds, and enjoy warm, restaurant-quality food at home.</p>
+            <div class="hero-actions">
+                <a href="#menu" class="btn btn-primary">Order Now</a>
+                <a href="#menu" class="btn btn-secondary">View Menu</a>
+            </div>
+            <div class="hero-notes">
+                <span>Fast pickup and delivery</span>
+                <span>Real homemade flavor</span>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <img src="{% static 'home/images/menu-feature.jpg' %}" alt="Delicious homemade meal">
+            <div class="hero-visual-tag">Trending dish</div>
+        </div>
+    </div>
+    <div class="hero-decor">
+        <span class="hero-float hero-float-1"></span>
+        <span class="hero-float hero-float-2"></span>
+        <span class="hero-float hero-float-3"></span>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section menu" id="menu">
+    <div class="section-heading">
+        <p class="section-label">Today’s Menu</p>
+        <h2>Restaurant-style meals from home kitchens.</h2>
+    </div>
+
+    {% if food_items %}
+        <div class="menu-grid">
+            {% for item in food_items %}
+                <article class="food-card">
+                    <a href="{% url 'food_detail' item.pk %}" class="food-card-image-link">
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    </a>
+                    <div class="food-card-body">
+                        <div class="food-card-top">
+                            <div>
+                                <h3>{{ item.name }}</h3>
+                                <p class="food-card-subtitle">{{ item.description|truncatechars:90 }}</p>
+                            </div>
+                            <span class="food-card-price">${{ item.price }}</span>
+                        </div>
+                        <div class="food-card-actions">
+                            <a href="{% url 'food_detail' item.pk %}" class="btn btn-secondary btn-sm">Details</a>
+                            <form action="{% url 'add_to_cart' item.pk %}" method="post" class="ajax-add-to-cart">
+                                {% csrf_token %}
+                                <input type="hidden" name="next" value="{% url 'home' %}#menu">
+                                <button type="submit" class="btn btn-primary btn-sm">Add to cart</button>
+                            </form>
+                        </div>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No meals are available yet.</h3>
+            <p>Add food items via the Django admin panel to populate the menu.</p>
+        </div>
+    {% endif %}
+</section>
+
+<section class="section about" id="about">
+    <div class="about-grid">
+        <div class="about-copy">
+            <p class="section-label">About us</p>
+            <h2>Fresh homemade meals made with real care.</h2>
+            <p>Our kitchen partners prepare every dish using seasonal ingredients, family recipes, and thoughtful packaging so your order arrives warm and ready.</p>
+            <ul class="about-list">
+                <li>Locally sourced ingredients</li>
+                <li>Daily menus crafted by home cooks</li>
+                <li>Fast, reliable delivery</li>
+            </ul>
+        </div>
+        <div class="about-image">
+            <img src="{% static 'home/images/about-story.jpg' %}" alt="Home cooked meals story">
+            <div class="image-tag">Made with love</div>
+        </div>
+    </div>
+</section>
+
+<section class="section steps" id="steps">
+    <div class="section-heading">
+        <p class="section-label">How it works</p>
+        <h2>Order in three easy steps.</h2>
+    </div>
+    <div class="steps-grid">
+        <article class="highlight-card">
+            <span class="highlight-icon">1</span>
+            <h3>Choose your meal</h3>
+            <p>Browse the menu and select dishes prepared by local cooks.</p>
+        </article>
+        <article class="highlight-card">
+            <span class="highlight-icon">2</span>
+            <h3>Place your order</h3>
+            <p>Add meals to your cart, provide your address, and checkout securely.</p>
+        </article>
+        <article class="highlight-card">
+            <span class="highlight-icon">3</span>
+            <h3>Enjoy at home</h3>
+            <p>Receive fresh, warm food delivered straight to your table.</p>
+        </article>
+    </div>
+</section>
+
+<section class="section showcase">
+    <div class="showcase-grid">
+        <div class="showcase-copy">
+            <p class="section-label">Fresh dishes</p>
+            <h2>Fresh dishes ready for your table.</h2>
+            <p>Every plate is curated for rich flavor and simple convenience, with seasonal ingredients and bold home-cooked taste.</p>
+        </div>
+        <div class="showcase-image showcase-glow">
+            <img src="{% static 'home/images/menu-feature.jpg' %}" alt="Flavorful meal showcase">
+        </div>
+    </div>
+</section>
+
+<section class="section gallery" id="gallery">
+    <div class="section-heading">
+        <p class="section-label">Gallery</p>
+        <h2>See our flavored meals in action.</h2>
+    </div>
+    <div class="gallery-grid">
+        <img src="{% static 'home/images/gallery-1.jpg' %}" alt="Meal gallery 1">
+        <img src="{% static 'home/images/gallery-2.jpg' %}" alt="Meal gallery 2">
+        <img src="{% static 'home/images/gallery-3.jpg' %}" alt="Meal gallery 3">
+    </div>
+</section>
+
+<section class="section testimonials" id="testimonials">
+    <div class="section-heading">
+        <p class="section-label">Testimonials</p>
+        <h2>Customers love our homemade meals.</h2>
+    </div>
+    <div class="testimonials-grid">
+        <article class="highlight-card">
+            <p>"The food was incredible and arrived warm. I’ll definitely order again!"</p>
+            <strong>— Maya P.</strong>
+        </article>
+        <article class="highlight-card">
+            <p>"Everything tasted so fresh and home-made. The delivery was fast too."</p>
+            <strong>— Luis G.</strong>
+        </article>
+        <article class="highlight-card">
+            <p>"Best meal service I’ve tried—great flavor, great portions, and easy checkout."</p>
+            <strong>— Hannah S.</strong>
+        </article>
+    </div>
+</section>
+
+<section class="section highlights">
+    <div class="highlight-grid">
+        <article class="highlight-card">
+            <span class="highlight-icon">⚡</span>
+            <h3>Fast ordering</h3>
+            <p>Select your meal, add it to the cart, and checkout in seconds.</p>
+        </article>
+        <article class="highlight-card">
+            <span class="highlight-icon">🧑‍🍳</span>
+            <h3>Home-cooked quality</h3>
+            <p>Every dish is prepared with care from local kitchens and fresh ingredients.</p>
+        </article>
+        <article class="highlight-card">
+            <span class="highlight-icon">🚚</span>
+            <h3>Delivery-ready</h3>
+            <p>Enjoy warm meals delivered straight to your door in clean packaging.</p>
+        </article>
+    </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    gsap.timeline()
+        .from('.hero-badge', {
+            opacity: 0,
+            scale: 0.8,
+            duration: 0.8,
+            ease: 'back.out(1.7)'
+        })
+        .from('.hero-copy .eyebrow', {
+            opacity: 0,
+            y: 20,
+            duration: 0.7,
+            ease: 'power3.out'
+        }, '-=0.5')
+        .from('.hero-copy h1', {
+            opacity: 0,
+            y: 40,
+            duration: 1.1,
+            ease: 'power3.out'
+        }, '-=0.5')
+        .from('.hero-copy p', {
+            opacity: 0,
+            y: 30,
+            duration: 0.9,
+            ease: 'power3.out'
+        }, '-=0.9')
+        .from('.hero-actions a', {
+            opacity: 0,
+            y: 20,
+            duration: 0.8,
+            stagger: 0.15,
+            ease: 'power3.out'
+        }, '-=0.8');
+
+    gsap.to('.hero-float-1', {
+        y: -18,
+        x: 12,
+        duration: 4.2,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true
+    });
+
+    gsap.to('.hero-float-2', {
+        y: -10,
+        x: -12,
+        duration: 4.8,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: 0.4
+    });
+
+    gsap.to('.hero-float-3', {
+        y: -22,
+        x: 8,
+        duration: 5.2,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        delay: 0.2
+    });
+
+    gsap.from('.section-heading', {
+        scrollTrigger: {
+            trigger: '.section-heading',
+            start: 'top 90%'
+        },
+        opacity: 0,
+        y: 30,
+        duration: 0.9,
+        ease: 'power3.out'
+    });
+
+    gsap.utils.toArray('.food-card, .highlight-card, .about-copy, .about-image, .showcase-image, .gallery-grid img, .testimonials-grid .highlight-card').forEach((card) => {
+        gsap.from(card, {
+            scrollTrigger: {
+                trigger: card,
+                start: 'top 90%',
+                toggleActions: 'play none none none'
+            },
+            opacity: 0,
+            y: 30,
+            duration: 0.85,
+            ease: 'power3.out',
+            delay: 0.1
+        });
+    });
+
+    gsap.from('.about-image img', {
+        scrollTrigger: {
+            trigger: '.about-image',
+            start: 'top 90%'
+        },
+        scale: 1.15,
+        duration: 1.4,
+        ease: 'power3.out'
+    });
+
+    gsap.to('.highlight-card', {
+        y: 5,
+        duration: 3,
+        ease: 'sine.inOut',
+        repeat: -1,
+        yoyo: true,
+        stagger: 0.15
+    });
+</script>
+{% endblock %}

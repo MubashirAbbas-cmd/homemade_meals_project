@@ -1,0 +1,38 @@
+{% extends 'home/base.html' %}
+
+{% block hero %}
+<section class="hero hero-large" id="account-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Your account</span>
+        <h1>Manage your profile</h1>
+        <p>Keep your name and email up to date for faster checkout.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card">
+        <h1>Account settings</h1>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="field-group">
+                {{ form.full_name.label_tag }}
+                {{ form.full_name }}
+                {{ form.full_name.errors }}
+            </div>
+
+            <div class="field-group">
+                {{ form.email.label_tag }}
+                {{ form.email }}
+                {{ form.email.errors }}
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save changes</button>
+        </form>
+        <p class="form-footer">Need to update your password? Use Django admin or another auth flow.</p>
+    </div>
+</section>
+{% endblock %}

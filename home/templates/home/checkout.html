@@ -1,0 +1,54 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block hero %}
+<section class="hero hero-large" id="checkout-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Checkout</span>
+        <h1>Complete your order</h1>
+        <p>Enter your details to place your order and enjoy homemade meals.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="cart-section">
+    <div class="cart-grid">
+        <div class="form-card">
+            <h2>Delivery details</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="field-group">
+                    <label for="customer_name">Name</label>
+                    <input type="text" id="customer_name" name="customer_name" placeholder="Your name" value="{{ default_name|default:'' }}" required>
+                </div>
+                <div class="field-group">
+                    <label for="customer_email">Email</label>
+                    <input type="email" id="customer_email" name="customer_email" placeholder="you@example.com" value="{{ default_email|default:'' }}" required>
+                </div>
+                <div class="field-group">
+                    <label for="customer_address">Address</label>
+                    <textarea id="customer_address" name="customer_address" rows="4" placeholder="Street address, city, postal code" required>{{ request.POST.customer_address|default:'' }}</textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Place order</button>
+            </form>
+        </div>
+
+        <aside class="summary-card checkout-summary">
+            <h2>Order details</h2>
+            <div class="summary-row">
+                <span>Items</span>
+                <strong>{{ total_qty }}</strong>
+            </div>
+            <div class="summary-row">
+                <span>Subtotal</span>
+                <strong>${{ subtotal }}</strong>
+            </div>
+            <div class="summary-row summary-total">
+                <span>Total</span>
+                <strong>${{ subtotal }}</strong>
+            </div>
+        </aside>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,72 @@
+{% extends 'home/base.html' %}
+
+{% block hero %}
+<section class="hero hero-large" id="orders-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Order history</span>
+        <h1>Your recent orders</h1>
+        <p>Track the status of your past and current orders.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <form method="get" class="order-filter-form">
+        <div class="order-filter-row">
+            <div>
+                <label for="status">Filter by status</label>
+                <select id="status" name="status">
+                    <option value="">All statuses</option>
+                    {% for value, label in status_choices %}
+                        <option value="{{ value }}" {% if selected_status == value %}selected{% endif %}>{{ label }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-actions">
+                <button type="submit" class="btn btn-secondary btn-sm">Apply</button>
+                {% if selected_status %}
+                    <a href="{% url 'order_history' %}" class="btn btn-primary btn-sm">Clear</a>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+
+    {% if orders %}
+        <div class="order-history-list">
+            {% for order in orders %}
+                <article class="order-card">
+                    <div class="order-card-header">
+                        <div>
+                            <p class="order-label">Order #{{ order.pk }}</p>
+                            <h3>{{ order.customer_name }}</h3>
+                        </div>
+                        <span class="order-status order-status-{{ order.status }}">{{ order.get_status_display }}</span>
+                    </div>
+                    <div class="order-card-meta">
+                        <span>{{ order.created_at|date:'M d, Y H:i' }}</span>
+                        <span>${{ order.total }}</span>
+                    </div>
+                    <div class="order-items">
+                        {% for item in order.items.all %}
+                            <div class="order-item-row">
+                                <span>{{ item.food.name if item.food else 'Deleted item' }}</span>
+                                <span>{{ item.quantity }} × ${{ item.price }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    <div class="order-card-footer">
+                        <a href="{% url 'reorder' order.pk %}" class="btn btn-secondary btn-sm">Reorder</a>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="empty-state">
+            <h3>No orders yet</h3>
+            <p>Your order history will appear here once you've placed your first meal.</p>
+            <a href="{% url 'home' %}#menu" class="btn btn-primary">Browse menu</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

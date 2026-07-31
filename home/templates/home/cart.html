@@ -1,0 +1,72 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block hero %}
+<section class="hero hero-large" id="cart-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Your cart</span>
+        <h1>Ready to checkout</h1>
+        <p>Review your selected meals before placing your order.</p>
+        <div class="hero-actions">
+            <a href="{% url 'home' %}#menu" class="btn btn-secondary">Continue browsing</a>
+            {% if cart_items %}
+                <a href="{% url 'checkout' %}" class="btn btn-primary">Checkout</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="cart-section">
+    {% if cart_items %}
+        <div class="cart-grid">
+            <div class="cart-list" id="cart-list">
+                {% for item in cart_items %}
+                    <article class="cart-item" data-item-id="{{ item.food.pk }}">
+                        <img src="{{ item.food.image.url }}" alt="{{ item.food.name }}">
+                        <div class="cart-item-info">
+                            <h3>{{ item.food.name }}</h3>
+                            <p>{{ item.food.description|truncatechars:100 }}</p>
+                            <div class="cart-item-actions">
+                                <div class="quantity-control" data-item-id="{{ item.food.pk }}">
+                                    <button type="button" class="qty-btn qty-decrease" aria-label="Decrease quantity">-</button>
+                                    <input type="number" class="quantity-input" data-item-id="{{ item.food.pk }}" value="{{ item.quantity }}" min="0">
+                                    <button type="button" class="qty-btn qty-increase" aria-label="Increase quantity">+</button>
+                                </div>
+                                <button type="button" class="btn btn-secondary btn-sm remove-item" data-item-id="{{ item.food.pk }}">Remove</button>
+                            </div>
+                        </div>
+                        <div class="cart-item-price">
+                            <span class="unit-price" data-unit-price="{{ item.food.price }}">${{ item.food.price }}</span>
+                            <strong class="item-line-total" data-item-id="{{ item.food.pk }}">${{ item.line_total }}</strong>
+                        </div>
+                    </article>
+                {% endfor %}
+            </div>
+            <aside class="summary-card" id="cart-summary">
+                <h2>Order summary</h2>
+                <div class="summary-row">
+                    <span>Items</span>
+                    <strong id="cart-total-items">{{ total_qty }}</strong>
+                </div>
+                <div class="summary-row">
+                    <span>Subtotal</span>
+                    <strong id="cart-subtotal">${{ subtotal }}</strong>
+                </div>
+                <div class="summary-row summary-total">
+                    <span>Total</span>
+                    <strong id="cart-total">${{ subtotal }}</strong>
+                </div>
+                <a href="{% url 'checkout' %}" class="btn btn-primary">Continue to checkout</a>
+            </aside>
+        </div>
+    {% else %}
+        <div class="empty-state" id="cart-empty-state">
+            <h3>Your cart is empty</h3>
+            <p>Add some delicious meals from the menu to start your order.</p>
+            <a href="{% url 'home' %}#menu" class="btn btn-primary">Browse menu</a>
+        </div>
+    {% endif %}
+</section>
+{% endblock %}

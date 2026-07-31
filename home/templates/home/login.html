@@ -1,0 +1,32 @@
+{% extends 'home/base.html' %}
+
+{% block hero %}
+<section class="hero hero-large" id="login-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Welcome back</span>
+        <h1>Login to your account</h1>
+        <p>Access your cart and order history.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card">
+        <h1>Sign in</h1>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            <div class="field-group">
+                <label for="id_username">Username</label>
+                <input type="text" name="username" id="id_username" required>
+            </div>
+            <div class="field-group">
+                <label for="id_password">Password</label>
+                <input type="password" name="password" id="id_password" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Login</button>
+        </form>
+        <p class="form-footer">New here? <a href="{% url 'signup' %}">Create an account</a>.</p>
+    </div>
+</section>
+{% endblock %}

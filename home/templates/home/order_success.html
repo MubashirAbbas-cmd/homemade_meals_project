@@ -1,0 +1,29 @@
+{% extends 'home/base.html' %}
+{% load static %}
+
+{% block hero %}
+<section class="hero hero-large" id="order-success-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Order placed</span>
+        <h1>Thanks, {{ customer_name }}!</h1>
+        <p>Your order for {{ total_qty }} item{{ total_qty|pluralize }} is confirmed.</p>
+        <div class="hero-actions">
+            <a href="{% url 'home' %}" class="btn btn-secondary">Back to menu</a>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="section">
+    <div class="summary-card">
+        <h2>Order confirmation</h2>
+        <p>We’re preparing your meals now. You should receive a confirmation message soon.</p>
+        <div class="summary-row">
+            <span>Total charged</span>
+            <strong>${{ subtotal }}</strong>
+        </div>
+        <p class="form-footer">Return to the home page to browse more dishes.</p>
+    </div>
+</section>
+{% endblock %}

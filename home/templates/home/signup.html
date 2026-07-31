@@ -1,0 +1,40 @@
+{% extends 'home/base.html' %}
+
+{% block hero %}
+<section class="hero hero-large" id="signup-hero">
+    <div class="hero-copy">
+        <span class="eyebrow">Get started</span>
+        <h1>Create your account</h1>
+        <p>Sign up to save orders, view history, and checkout faster.</p>
+    </div>
+</section>
+{% endblock %}
+
+{% block content %}
+<section class="auth-page">
+    <div class="auth-card">
+        <h1>Sign up</h1>
+        <form method="post" class="auth-form">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="field-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {{ form.username.errors }}
+            </div>
+            <div class="field-group">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {{ form.password1.errors }}
+            </div>
+            <div class="field-group">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {{ form.password2.errors }}
+            </div>
+            <button type="submit" class="btn btn-primary">Create account</button>
+        </form>
+        <p class="form-footer">Already got an account? <a href="{% url 'login' %}">Login now</a>.</p>
+    </div>
+</section>
+{% endblock %}

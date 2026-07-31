@@ -1,0 +1,67 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Made Food</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'home/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.2/gsap.min.js" integrity="sha512-TtTBV978E9QJcG+F9IvC/FXr+CL6Hf82cglpsptYxmgp5zqQaqd0jFhJ35JlOAAVVahm6pSJ2naP5NfgFzWcSQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.2/ScrollTrigger.min.js" integrity="sha512-YuzZyG6CeV8xRXd3TX0VZC7Qv7Pn8kxZ2emPktbJ08RAJNYZcqVf/lW0/0lct9LljLgxR7MTIYOKhZ6hfaEIXA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+<body>
+    <header class="site-header">
+        <div class="container header-inner">
+            <a href="{% url 'home' %}" class="site-title">Home Made Food</a>
+            <nav class="nav-links">
+                <a href="{% url 'home' %}#home">Home</a>
+                <a href="{% url 'home' %}#menu">Menu</a>
+                <a href="{% url 'home' %}#about">About</a>
+                <a href="{% url 'home' %}#gallery">Gallery</a>
+                <a href="{% url 'home' %}#testimonials">Testimonials</a>
+                <a href="{% url 'cart' %}" class="cart-link">
+                    Cart <span id="cart-badge" class="cart-badge">{{ cart_qty|default:0 }}</span>
+                </a>
+                {% if request.user.is_authenticated %}
+                    <a href="{% url 'account' %}">Account</a>
+                    <a href="{% url 'order_history' %}">Orders</a>
+                    <span class="user-chip">Hi, {{ request.user.username }}</span>
+                    <a href="{% url 'logout' %}" class="auth-link">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="auth-link">Login</a>
+                    <a href="{% url 'signup' %}" class="auth-link signup-link">Sign up</a>
+                {% endif %}
+            </nav>
+        </div>
+    </header>
+
+    <div class="messages">
+        <div class="container">
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+
+    <main>
+        {% block hero %}{% endblock %}
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="container">
+            Made with care for fresh homemade food. Created with Django and a smoother ordering experience.
+        </div>
+    </footer>
+
+    <script src="{% static 'home/cart.js' %}"></script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>
