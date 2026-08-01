@@ -87,15 +87,30 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASES = {
-    'default': dj_database_url.config(
-        default=f'sqlite:///{BASE_DIR / "db.sqlite3"}',
-        conn_max_age=600,
-        ssl_require=os.environ.get('DJANGO_DB_SSL_REQUIRE', 'False' if DEBUG else 'True') == 'True',
-    )
-}
+DATABASE_URL = os.environ.get('DATABASE_URL')
 
-if not DEBUG:
+if DEBUG:
+    default_db_url = f'sqlite:///{BASE_DIR / "db.sqlite3"}'
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=default_db_url,
+            conn_max_age=600,
+            ssl_require=False,
+        )
+    }
+else:
+    if not DATABASE_URL:
+        raise ImproperlyConfigured('DATABASE_URL must be set in production.')
+    DATABASES = {
+        'default': dj_database_url.config(
+            default=DATABASE_URL,
+            conn_max_age=600,
+            ssl_require=os.environ.get('DJANGO_DB_SSL_REQUIRE', 'True') == 'True',
+        )
+    }
+    if DATABASES['default'] is None:
+        raise ImproperlyConfigured('DATABASE_URL is invalid.')
+
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 
