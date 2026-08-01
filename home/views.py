@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from food.models import Food
-from .models import Order, OrderItem
+from .models import Order, OrderItem, PageSectionImage
 
 User = get_user_model()
 
@@ -121,7 +121,21 @@ def global_context(request):
 
 def home_view(request):
     food_items = Food.objects.all()
-    context = {'food_items': food_items}
+    section_images = PageSectionImage.objects.order_by('section', 'sort_order')
+
+    section_map = {}
+    gallery_images = []
+    for item in section_images:
+        if item.section == PageSectionImage.SECTION_GALLERY:
+            gallery_images.append(item)
+        elif item.section not in section_map:
+            section_map[item.section] = item
+
+    context = {
+        'food_items': food_items,
+        'section_images': section_map,
+        'gallery_images': gallery_images,
+    }
     context.update(global_context(request))
     return render(request, 'home/home.html', context)
 

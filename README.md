@@ -21,8 +21,9 @@ This Django project is now prepared for production deployment on a platform like
    ```powershell
    pip install -r requirements.txt
    ```
-3. Run migrations:
+3. Create any missing migrations and apply them:
    ```powershell
+   python manage.py makemigrations
    python manage.py migrate
    ```
 4. Collect static files:
@@ -33,6 +34,13 @@ This Django project is now prepared for production deployment on a platform like
    ```powershell
    python manage.py runserver
    ```
+
+## Before deployment
+
+1. Create a GitHub repository and push this project to the `main` branch.
+2. Open a Cloudinary account and copy your `cloud_name`, `api_key`, and `api_secret`.
+3. Use the `.env.example` file as a template for your production variables.
+4. Confirm `DEBUG=False` and `DJANGO_SECRET_KEY` is set to a strong secret in production.
 
 ## Deploying to Render
 
@@ -63,7 +71,12 @@ Set these values in Render's Environment section:
 - `DJANGO_SECRET_KEY` = a long secret string
 - `DJANGO_DEBUG` = `False`
 - `DJANGO_ALLOWED_HOSTS` = `your-app-name.onrender.com`
+- `DJANGO_CSRF_TRUSTED_ORIGINS` = `https://your-app-name.onrender.com`
 - `DATABASE_URL` = Render Postgres database URL
+- `DJANGO_USE_CLOUDINARY` = `True`
+- `CLOUDINARY_CLOUD_NAME` = your Cloudinary cloud name
+- `CLOUDINARY_API_KEY` = your Cloudinary API key
+- `CLOUDINARY_API_SECRET` = your Cloudinary API secret
 
 ### 4. Add a Postgres database
 
@@ -78,6 +91,12 @@ After Render finishes building, run these commands in the Render shell or deploy
 python manage.py migrate
 python manage.py collectstatic --noinput
 ```
+
+## Render files included in this repo
+
+- `.render.yaml` — Render service configuration
+- `runtime.txt` — Python runtime version
+- `Procfile` — Gunicorn startup command
 
 ## Example `.env.example`
 

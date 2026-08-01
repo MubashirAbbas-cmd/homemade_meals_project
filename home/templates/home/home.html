@@ -2,7 +2,8 @@
 {% load static %}
 
 {% block hero %}
-<section class="hero hero-large" id="home" style="background-image: linear-gradient(180deg, rgba(18, 12, 5, 0.55), rgba(232, 105, 40, 0.25)), url('{% static 'home/images/hero-bg.jpg' %}');">
+{% with hero_bg=section_images.hero_background hero_feature=section_images.hero_feature %}
+<section class="hero hero-large" id="home" style="background-image: linear-gradient(180deg, rgba(18, 12, 5, 0.55), rgba(232, 105, 40, 0.25)), url('{% if hero_bg %}{{ hero_bg.image.url }}{% else %}{% static 'home/images/hero-bg.jpg' %}{% endif %}');">
     <div class="hero-grid">
         <div class="hero-copy">
             <span class="eyebrow">Fresh food, fast delivery</span>
@@ -18,7 +19,7 @@
             </div>
         </div>
         <div class="hero-visual">
-            <img src="{% static 'home/images/menu-feature.jpg' %}" alt="Delicious homemade meal">
+            <img src="{% if hero_feature %}{{ hero_feature.image.url }}{% else %}{% static 'home/images/menu-feature.jpg' %}{% endif %}" alt="Delicious homemade meal">
             <div class="hero-visual-tag">Trending dish</div>
         </div>
     </div>
@@ -28,6 +29,7 @@
         <span class="hero-float hero-float-3"></span>
     </div>
 </section>
+{% endwith %}
 {% endblock %}
 
 {% block content %}
@@ -85,7 +87,7 @@
             </ul>
         </div>
         <div class="about-image">
-            <img src="{% static 'home/images/about-story.jpg' %}" alt="Home cooked meals story">
+            <img src="{% if section_images.about_story %}{{ section_images.about_story.image.url }}{% else %}{% static 'home/images/about-story.jpg' %}{% endif %}" alt="Home cooked meals story">
             <div class="image-tag">Made with love</div>
         </div>
     </div>
@@ -123,20 +125,19 @@
             <p>Every plate is curated for rich flavor and simple convenience, with seasonal ingredients and bold home-cooked taste.</p>
         </div>
         <div class="showcase-image showcase-glow">
-            <img src="{% static 'home/images/menu-feature.jpg' %}" alt="Flavorful meal showcase">
-        </div>
-    </div>
-</section>
-
-<section class="section gallery" id="gallery">
-    <div class="section-heading">
-        <p class="section-label">Gallery</p>
+            <img src="{% if section_images.showcase %}{{ section_images.showcase.image.url }}{% else %}{% static 'home/images/menu-feature.jpg' %}{% endif %}" alt="Flavorful meal showcase">
         <h2>See our flavored meals in action.</h2>
     </div>
     <div class="gallery-grid">
-        <img src="{% static 'home/images/gallery-1.jpg' %}" alt="Meal gallery 1">
-        <img src="{% static 'home/images/gallery-2.jpg' %}" alt="Meal gallery 2">
-        <img src="{% static 'home/images/gallery-3.jpg' %}" alt="Meal gallery 3">
+        {% if gallery_images %}
+            {% for image in gallery_images %}
+                <img src="{{ image.image.url }}" alt="{{ image.caption|default:'Gallery image' }}">
+            {% endfor %}
+        {% else %}
+            <img src="{% static 'home/images/gallery-1.jpg' %}" alt="Meal gallery 1">
+            <img src="{% static 'home/images/gallery-2.jpg' %}" alt="Meal gallery 2">
+            <img src="{% static 'home/images/gallery-3.jpg' %}" alt="Meal gallery 3">
+        {% endif %}
     </div>
 </section>
 

@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: homemade-meals
+    env: python
+    plan: starter
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn core.wsgi:application
+    autoDeploy: true
